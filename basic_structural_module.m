@@ -1,7 +1,24 @@
 function [ structural,w_heaveTMM, w_pitchTMM, fHz_imbalance ] = basic_structural_module(segc,panelc,sim,Mpoint, FTM_size,Bend_root_guess,Tor_root_guess,idx_start,idx_end )%,matxRR
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-% All parameters are to be evaluated at r = rmode
+%% EVALUATES STRUTURAL NATURAL FREQ + MODESHAPES
+
+%--------------------------------INPUT-------------------------------------
+% segc            - MATLAB structure data type, segmental properties of the beam
+% panelc          - panelwise/stripwise discretization of the structural properties in segc
+% sim             - structural simulation options (ex: # modes to be included)
+% Mpoint          - lumped mass points
+% FTM_size        - size of Field Transfer matrix (4 x 4 OR 6 x 6)
+% Bend_root_guess - guess range of bending natural frequencies [min range, max range]
+% Tor_root_guess  - guess range of torsional natural frequencies [min range, max range]
+
+%--------------------------------OUTPUT------------------------------------
+% structural - MATLAB structure data type containing evaluated structural parameters
+%              check inside the functions for more details
+%              TMM_bending.m
+%              TMM_torsion.m
+% w_heaveTMM - heave natural frequency vector
+% w_pitchTMM - pitch natural frequency vector
+% fHz_imbalance - frequency due to bending-torsion coupling (if any)
+% NOTE: All 'panel' parameters are to be evaluated at r = rmode
 
 %% Error checking at INPUT
 IN_min = 7;  %min inputs
@@ -27,7 +44,7 @@ BC     = sim.BC;
 rmode  = segc.rmode;
 Acs    = segc.Acs;
 Jp     = segc.Jp;
-T      = 0*sim.T;
+T      = sim.T;
 % keyboard
 %% Calculating mode shapes in lead-lag DOF 
 syms x
